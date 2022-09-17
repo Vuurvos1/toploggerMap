@@ -8,14 +8,22 @@ Reverse engineering the Toplogger api
 
 ### List of registered gyms
 
-`baseurl/gyms`
+`https://api.toplogger.nu/v1/gyms`
 
 ### Single climbing gym
 
-`baseurl/gyms/:gym id`
-`baseurl/gyms/:gym slug`
+`https://api.toplogger.nu/v1/gyms/:gym id`
+`https://api.toplogger.nu/v1/gyms/:gym slug`
 
-gym id can be found in the gyms list
+Gym ids and slugs can be found in the [gyms api endpoint](#list-of-registered-gyms)
+
+This endpoint like most others accepts `json_params`. Example of json_params you can add:
+
+```json
+{ "includes": ["holds", "walls", "setters"] }
+```
+
+<!-- https://api.toplogger.nu/v1/gyms/monk-amsterdam.json?json_params=%7B%22includes%22:[%22holds%22,%22walls%22,%22setters%22]%7D -->
 
 ### Gyms floor plan
 
@@ -30,7 +38,7 @@ note that the svg is semi broken and you need the first `<g>` element in the SVG
 
 ### List of climbs at a specific gym
 
-`baseurl/gyms/:gym id/climbs`
+`https://api.toplogger.nu/v1/gyms/:gym id/climbs`
 
 (this is a list of all the climbs at a gym, even removed ones)
 
@@ -70,7 +78,7 @@ list of possible filters:
 
 ### Single climb data
 
-`baseurl/gyms/:gym id/climbs/:climb id`
+`https://api.toplogger.nu/v1/gyms/:gym id/climbs/:climb id`
 
 climb/route id can be found in the list of climbs of a gym
 
@@ -81,4 +89,4 @@ climb/route id can be found in the list of climbs of a gym
  <!-- https://cdn1.toplogger.nu/images/gyms/bruut_boulder_breda/floorplan.svg -->
  <!-- https://api.toplogger.nu/v1/gyms/8/climbs?json_params=%7B%22filters%22:%7B%22deleted%22:false,%22live%22:true%7D%7D -->
 
-`baseurl/groups?json_params`
+`https://api.toplogger.nu/v1/groups?json_params`

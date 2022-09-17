@@ -56,6 +56,7 @@
     panDeltaY = 0;
   }
 
+  // TODO throttle this event?
   function onWheel(ev) {
     let newZoom = Math.max(
       scaleExtent[0],

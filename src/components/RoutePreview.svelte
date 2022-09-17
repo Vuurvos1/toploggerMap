@@ -28,12 +28,15 @@
         stroke="currentColor"
         stroke-width="2"
         stroke-linecap="round"
-        stroke-linejoin="round"
-        class="feather feather-chevron-down"
-        ><polyline points="6 9 12 15 18 9" /></svg
+        stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg
       >
     </button>
   </div>
+
+  <!-- wall area -->
+  {#if $selectedClimb.remarks}
+    <p>Remarks: {$selectedClimb.remarks}</p>
+  {/if}
 
   <ul>
     <li>
@@ -46,9 +49,9 @@
     <li>date set: {dateConvert($selectedClimb.date_set)}</li>
   </ul>
 
-  <!-- <pre>
-      { JSON.stringify(data, undefined, 2) }
-    </pre> -->
+  <pre>
+      {JSON.stringify($selectedClimb, null, 2)}
+    </pre>
 </div>
 
 <style>

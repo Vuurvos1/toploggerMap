@@ -179,7 +179,7 @@
       .on('click', (e, d) => {
         e.stopPropagation();
         selectedClimb = d;
-        showRouteData = true;
+        showRouteData.set(true);
 
         console.log('bbox', bbox.width, windowWidth);
 

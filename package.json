@@ -8,14 +8,14 @@
     "serve": "vite preview"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.39",
-    "autoprefixer": "^10.4.2",
-    "postcss": "^8.4.8",
-    "svelte": "^3.46.4",
+    "@sveltejs/vite-plugin-svelte": "^1.0.5",
+    "autoprefixer": "^10.4.11",
+    "postcss": "^8.4.16",
+    "svelte": "^3.50.1",
     "tailwindcss": "^2.2.19",
-    "vite": "^2.8.6"
+    "vite": "^3.1.2"
   },
   "dependencies": {
-    "d3": "^7.3.0"
+    "d3": "^7.6.1"
   }
 }

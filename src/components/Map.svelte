@@ -3,6 +3,8 @@
 
   import RouteDot from './RouteDot.svelte';
 
+  import { zoomLevel } from '../stores';
+
   export let climbs = [];
   export let groups = [];
   export let mapSvg;
@@ -15,7 +17,7 @@
   let mapWidth = 0;
   let mapHeight = 0;
 
-  let scale = 1;
+  $: scale = (1 / $zoomLevel) * 1;
 
   $: windowWidth = 0;
   $: windowHeight = 0;
@@ -45,8 +47,8 @@
       mapWidth = bbox.width;
       mapHeight = bbox.height;
 
-      x = -bbox.x * scale;
-      y = -bbox.y * scale;
+      let x = -bbox.x * scale;
+      let y = -bbox.y * scale;
       // x = windowWidth / 2 - (bbox.width / 2) * baseScale;
       // y = windowHeight / 2 - (bbox.height / 2) * baseScale;
       // y = -bbox.y;
@@ -91,6 +93,7 @@
           <RouteDot
             x={mapWidth * climb.position_x}
             y={mapHeight * climb.position_y}
+            {scale}
             {climb}
             {groups}
           />
