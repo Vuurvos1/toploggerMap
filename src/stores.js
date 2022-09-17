@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { writable, derived, get } from 'svelte/store';
 
 // gyms store
 const storedGyms = JSON.parse(localStorage.getItem('gyms'));
@@ -25,11 +25,19 @@ export const gradeSystem = writable(undefined);
 // store map
 // store routes
 
-// store gyms
-
 // store checkmarked routes?
 
 export const zoomLevel = writable(1);
 
 export const selectedClimb = writable({});
 export const showRouteData = writable(false);
+
+export let colorMap = derived(gym, ($gym) => {
+  let map = {};
+  $gym.holds.forEach((item) => {
+    map[item.brand] = item.color_secondary
+      ? `linear-gradient(135deg, ${item.color} 50%, ${item.color_secondary} 50%)`
+      : item.color;
+  });
+  return map;
+});

@@ -49,9 +49,7 @@
     <li>date set: {dateConvert($selectedClimb.date_set)}</li>
   </ul>
 
-  <pre>
-      {JSON.stringify($selectedClimb, null, 2)}
-    </pre>
+  <!-- <pre>{JSON.stringify($selectedClimb, null, 2)}</pre> -->
 </div>
 
 <style>

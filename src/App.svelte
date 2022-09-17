@@ -13,6 +13,8 @@
   import Map from './components/Map.svelte';
   import Zoomer from './components/Zoomer.svelte';
 
+  // TODO fix crash when switching gyms (has to do with dot color)
+
   let d3climbs;
 
   $: climbs = [];
@@ -22,8 +24,6 @@
   let map;
   let mapWidth;
   let mapHeight;
-
-  // let dotScale = 1;
 
   let routesElement;
 

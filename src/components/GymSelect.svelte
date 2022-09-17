@@ -24,9 +24,22 @@
     name=""
     id="gym"
     bind:value={selected}
-    on:change={() => {
+    on:change={async () => {
+      const params = {
+        includes: ['holds', 'walls'],
+      };
+
+      // fetch gym data with hold and wall data
+      const url = `https://api.toplogger.nu/v1/gyms/${
+        selected.id
+      }?json_params=${encodeURIComponent(JSON.stringify(params))}`;
+
+      const res = await fetch(url);
+      const data = await res.json();
+
       // update data
-      gymStore.set(selected);
+      gymStore.set(data);
+
       dispatch('change', selected);
     }}
   >
