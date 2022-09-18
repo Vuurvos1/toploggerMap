@@ -3,7 +3,7 @@
 
   import RouteDot from './RouteDot.svelte';
 
-  import { zoomLevel } from '../stores';
+  import { zoomLevel, routes } from '../stores';
 
   export let climbs = [];
   export let groups = [];
@@ -89,7 +89,7 @@
     </g>
     <g class="routes">
       {#if showRoutes}
-        {#each climbs as climb}
+        {#each $routes as climb}
           <RouteDot
             x={mapWidth * climb.position_x}
             y={mapHeight * climb.position_y}

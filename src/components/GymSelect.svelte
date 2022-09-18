@@ -1,13 +1,18 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { gyms, gym as gymStore } from '../stores.js';
+  import { loop_guard } from 'svelte/internal';
+  import { getGymData } from '../modules/fetchGymData.js';
+  import {
+    gyms,
+    gym as gymStore,
+    routes as routeStore,
+    mapSvg,
+  } from '../stores.js';
   if ($gyms == null || Object.keys($gyms).length == 0) {
     getGyms();
   }
 
   export let selected;
-
-  const dispatch = createEventDispatcher();
 
   async function getGyms() {
     const data = await fetch('https://api.toplogger.nu/v1/gyms/');
@@ -25,22 +30,14 @@
     id="gym"
     bind:value={selected}
     on:change={async () => {
-      const params = {
-        includes: ['holds', 'walls'],
-      };
+      const { svg, gym, routes } = await getGymData(
+        selected.id,
+        selected.id_name
+      );
 
-      // fetch gym data with hold and wall data
-      const url = `https://api.toplogger.nu/v1/gyms/${
-        selected.id
-      }?json_params=${encodeURIComponent(JSON.stringify(params))}`;
-
-      const res = await fetch(url);
-      const data = await res.json();
-
-      // update data
-      gymStore.set(data);
-
-      dispatch('change', selected);
+      gymStore.set(gym);
+      routeStore.set(routes);
+      mapSvg.set(svg);
     }}
   >
     {#if $gyms && Object.keys($gyms).length != 0 && $gyms}

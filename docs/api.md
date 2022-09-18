@@ -19,6 +19,8 @@ Gym ids and slugs can be found in the [gyms api endpoint](#list-of-registered-gy
 
 This endpoint like most others accepts `json_params`. Example of json_params you can add:
 
+<!-- does an exclude also exist??? -->
+
 ```json
 { "includes": ["holds", "walls", "setters"] }
 ```

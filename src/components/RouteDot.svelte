@@ -17,15 +17,15 @@
   export let x;
   export let y;
 
-  $: hold = $gym.holds.find((hold) => hold.id === climb.hold_id);
+  let hold = $gym.holds.find((hold) => hold.id === climb.hold_id);
 </script>
 
 <foreignObject
   class="cursor-pointer overflow-visible"
   width="40"
   height="40"
-  {x}
-  {y}
+  x={x - 20}
+  y={y - 20}
   on:click|stopPropagation={() => {
     $selectedClimb = climb;
     $showRouteData = true;

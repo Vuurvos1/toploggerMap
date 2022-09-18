@@ -28,7 +28,7 @@
     on:change={() => {
       gradeSystem.set(selected);
 
-      dispatch('change', selected);
+      dispatch('change', selected); // TODO remove this
     }}
   >
     {#each gradeSystems as grade}

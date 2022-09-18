@@ -17,13 +17,15 @@ gym.subscribe((value) => {
   }
 });
 
-export const gradeSystem = writable(undefined);
+export const gradeSystem = writable('french_boulder');
 
 // TODO add stores for routes, svg and groups
-// export const map = svg
 
 // store map
+export const mapSvg = writable('');
+
 // store routes
+export const routes = writable([]);
 
 // store checkmarked routes?
 

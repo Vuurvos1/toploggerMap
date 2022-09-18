@@ -4,6 +4,7 @@
 
   import GymSelect from './GymSelect.svelte';
   import GradeSelector from './GradeSelector.svelte';
+  // import { getGymData } from '../modules/fetchGymData';
 
   const dispatch = createEventDispatcher();
 
@@ -27,14 +28,11 @@
       stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class="feather feather-menu"
-      ><line x1="3" y1="12" x2="21" y2="12" /><line
-        x1="3"
-        y1="6"
-        x2="21"
-        y2="6"
-      /><line x1="3" y1="18" x2="21" y2="18" /></svg
     >
+      <line x1="3" y1="12" x2="21" y2="12" />
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <line x1="3" y1="18" x2="21" y2="18" />
+    </svg>
   </label>
   <input
     type="checkbox"
@@ -47,20 +45,9 @@
     class:open={menuOpen}
     class="menu fixed top-0 left-0 h-screen w-80 pt-12 bg-white shadow-lg"
   >
-    <GymSelect
-      bind:selected
-      on:change={(e) => {
-        dispatch('changeGym', e.detail);
-      }}
-    />
+    <GymSelect bind:selected />
 
-    <GradeSelector
-      on:change={(e) => {
-        // selected = e.detail;
-        // console.log(e.detail);
-        // dispatch('changeGym', e.detail);
-      }}
-    />
+    <GradeSelector />
   </div>
 </header>
 
