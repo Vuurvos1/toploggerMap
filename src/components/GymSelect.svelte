@@ -1,6 +1,4 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
-  import { loop_guard } from 'svelte/internal';
   import { getGymData } from '../modules/fetchGymData.js';
   import {
     gyms,

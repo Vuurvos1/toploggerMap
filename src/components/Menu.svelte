@@ -1,12 +1,8 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
   import { gyms, gym } from '../stores';
 
   import GymSelect from './GymSelect.svelte';
   import GradeSelector from './GradeSelector.svelte';
-  // import { getGymData } from '../modules/fetchGymData';
-
-  const dispatch = createEventDispatcher();
 
   let menuOpen = false;
 
@@ -37,8 +33,8 @@
   <input
     type="checkbox"
     id="menuToggle"
-    bind:checked={menuOpen}
     class="w-0 h-0 hidden"
+    bind:checked={menuOpen}
   />
 
   <div

@@ -261,15 +261,15 @@
 </main>
 
 <style>
-  main {
-    width: 100vw;
-    height: 100vh;
-  }
-
   :global(body) {
     height: 100vh;
     max-height: 100vh;
     overflow: hidden;
+  }
+
+  main {
+    width: 100vw;
+    height: 100vh;
   }
 
   .testMap {
@@ -283,13 +283,5 @@
 
   /* .svgContainer {
     width: calc(100vw - (100vw - 100%));
-  } */
-
-  /* :global(.white) {
-    fill: var(--white);
-  }
-
-  :global(.black) {
-    fill: var(--black);
   } */
 </style>
