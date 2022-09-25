@@ -95,7 +95,6 @@
             y={mapHeight * climb.position_y}
             {scale}
             {climb}
-            {groups}
           />
         {/each}
       {/if}

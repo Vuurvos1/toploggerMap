@@ -8,6 +8,8 @@
 
   let selectedIndex = $gyms?.findIndex((x) => x?.id === $gym?.id);
   let selected = selectedIndex > -1 ? $gyms[selectedIndex] : {};
+
+  // TODO clicking outside of menu closes menu
 </script>
 
 <header
