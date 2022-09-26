@@ -1,3 +1,6 @@
+import { get } from 'svelte/store';
+import { gym } from '../stores';
+
 const grades = {
   uiaa: {
     2: 'III',
@@ -251,8 +254,28 @@ const grades = {
   },
 };
 
-// convert grade value to different grading system
+/**
+ * convert grade value to different grading system
+ * @param { number } value grading value to convert
+ * @param { string } to grading system to convert to
+ */
 export function gradeConverter(value, to) {
+  // convert custom to custom
+  if (to === 'custom_boulder') {
+    // TODO test for routes
+    // TODO What to do with name1 and name2 and so on
+    // TODO this could be optimized, since you use the same grading system for every boulder
+    const gradingLookup = JSON.parse(
+      get(gym).grading_system_custom_boulders_json
+    );
+
+    const item = gradingLookup.data.find(
+      (item) => item.value === Number(value)
+    );
+
+    return item.name;
+  }
+
   // get closest grade if none is found
   if (!grades[to][Number(value)]) {
     // convert keys to numbers
