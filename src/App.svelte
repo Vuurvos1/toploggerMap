@@ -21,22 +21,12 @@
   // let gymSvg = ''; // rename to mapSvg / floorplanSvg / svgMap
   let groups;
 
-  let map;
-  let mapWidth;
-  let mapHeight;
-
   let routesElement;
 
   let selectedGym = $gym?.id ? $gym : {};
 
   let windowWidth = window.innerWidth;
   let windowHeight = window.innerHeight;
-
-  // $: windowWidth, mapSetup();
-  // $: windowHeight, mapSetup();
-
-  // $: gymSvg, d3ify(climbs, groups);
-  // $: gymSvg, getMapWidth();
 
   // $: {
   //   if (gymSvg) {
@@ -56,36 +46,6 @@
     mapWidth = width;
     mapHeight = height;
   }
-
-  afterUpdate(() => {
-    // if (map && gymSvg) {
-    //   const mapWrap = document.querySelector('#map');
-    //   // console.log(mapWrap);
-    //   // console.log(
-    //   //   mapWrap.getBoundingClientRect(),
-    //   //   mapWrap.offsetWidth,
-    //   //   mapWrap.clientHeight
-    //   // );
-    //   const { width, height } = mapWrap.getBoundingClientRect();
-    //   // mapWidth = width;
-    //   // mapHeight = height;
-    // }
-    // // climbs = climbs;
-  });
-
-  gradeSystem.subscribe((value) => {
-    // rerender values
-    if (d3climbs) {
-      d3climbs
-        .selectAll('div')
-        .html((d) => {
-          // TODO update to be based on route type and gym grading
-          return gradeConverter(d.grade, value ? value : 'french_boulder');
-        })
-        .attr('style', (d) => getRouteColor(d.id, groups, true))
-        .style('color', (d) => getContrast(getRouteColor(d.id, groups, false)));
-    }
-  });
 
   // TODO add popup to re center map if you are far out > disable panning clamp
 
@@ -229,7 +189,7 @@
     const selectedGym = $gym?.id_name ? $gym.id_name : 'bruut_boulder_breda';
     const selectedId = $gym?.id ? $gym.id : 8;
 
-    // fetch all data
+    // Fetch all data for a given gym
     const {
       svg: svg,
       gym: b,

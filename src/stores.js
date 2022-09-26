@@ -43,3 +43,15 @@ export let colorMap = derived(gym, ($gym) => {
   });
   return map;
 });
+
+// Store wrapper
+export const throttle = (store) => {
+  let lastTime;
+  return derived(store, (value, set) => {
+    let now = Date.now();
+    if (!lastTime || now - lastTime > 10) {
+      set(value);
+      lastTime = now;
+    }
+  });
+};

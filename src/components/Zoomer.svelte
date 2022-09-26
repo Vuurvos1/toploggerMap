@@ -2,11 +2,12 @@
   import { onMount } from 'svelte';
   import { zoomLevel } from '../stores';
 
+  $: zoom, ($zoomLevel = zoom);
+
   export let disabled = false;
 
   let isPanning = false;
-  // let zoom = 1;
-  let zoom = 0.1;
+  let zoom = 0.5; // TODO change back to 1
 
   // $: zoomToPixel($selectedPixel);
   /** @param {{x: number, y: number}} pixel  */
@@ -36,27 +37,17 @@
 
   export let scaleExtent = [0, Infinity];
 
-  // function isPanningStartAllowed(ev) {
-  //   return ev.button === 0;
-  // }
-
   /** @param {PointerEvent} ev  */
   function onPanningStart(ev) {
     if (disabled) return;
-    console.log('panning1');
 
     // Which buttons are these?
     if (ev.button > 0) {
       onPanningStop(ev);
       return;
     }
-    console.log('panning2', ev.pointerId, activePointerid);
 
     if (activePointerid !== undefined) return;
-
-    console.log('panning3');
-
-    // if (!isPanningStartAllowed(ev)) return;
 
     // ev.preventDefault();
     // ev.stopPropagation();
@@ -108,7 +99,6 @@
     }
 
     // console.log(clampedX, clampedY);
-
     // return [clampedX, clampedY];
     return [x, y]; // TODO fix math
   }
@@ -151,7 +141,6 @@
     const scaleDifference = newZoom - zoom;
 
     zoom = newZoom;
-    $zoomLevel = zoom;
     x -= mouseX * scaleDifference;
     y -= mouseY * scaleDifference;
     const [clampedX, clampedY] = clampPanning(x, y);
@@ -180,21 +169,24 @@
   let lastPinchDisctance; // number
   /** @param {TouchEvent} ev  */
   function onTouchStart(ev) {
-    console.log('touch start');
+    console.log('start');
     if (ev.touches.length === 2) {
-      // What even is a hypot???
-      console.log('touch start');
+      // What even is a hypot??? and is it fast?
+      console.log('start');
+
       lastPinchDisctance = Math.hypot(
         ev.touches[0]?.pageX - ev.touches[1]?.pageX, // do a non-null assertion?
         ev.touches[0]?.pageY - ev.touches[1]?.pageY
       );
     }
+    console.log('start');
+
     onPanningStart(ev.touches[0]);
-    console.log('touch start');
   }
 
   /** @param {TouchEvent} ev  */
   function onTouchMove(ev) {
+    console.log('touch move');
     if (ev.touches.length !== 2) return;
 
     const rect = inner.getBoundingClientRect();
@@ -217,8 +209,8 @@
     x -= mouseX * scaleDifference;
     y -= mouseY * scaleDifference;
 
-    const [clmapedX, clampedY] = clampPanning(x, y);
-    x = clmapedX;
+    const [clampedX, clampedY] = clampPanning(x, y);
+    x = clampedX;
     y = clampedY;
 
     lastPinchDisctance = pinchDistance;
@@ -252,7 +244,7 @@
   on:pointermove={onPanning}
   on:pointerup={onPanningStop}
   on:mousewheel={onWheel}
-  on:touchstart|preventDefault={onTouchStart}
+  on:touchstart={onTouchStart}
   on:touchmove|preventDefault={onTouchMove}
   bind:clientWidth={wrapperWidth}
   bind:clientHeight={wrapperHeight}

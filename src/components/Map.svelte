@@ -1,15 +1,17 @@
 <script>
   import { onMount, tick } from 'svelte';
-
   import RouteDot from './RouteDot.svelte';
+  import { zoomLevel, routes, throttle } from '../stores';
 
-  import { zoomLevel, routes } from '../stores';
-
-  export let climbs = [];
-  export let groups = [];
-  export let mapSvg;
+  export let mapSvg; // this could just the the store?
 
   let showRoutes = true;
+  $: {
+    // only show routes when zoomed in far enough (base value on screen size?)
+    // if zoomed to far out, show gym area names
+    // showRoutes = $zoomLevel > 0.25;
+  }
+  // $: $zoomLevel, console.log($zoomLevel);
 
   let map;
   let svgMap;
@@ -17,7 +19,8 @@
   let mapWidth = 0;
   let mapHeight = 0;
 
-  $: scale = (1 / $zoomLevel) * 1;
+  let throttledScale = throttle(zoomLevel);
+  $: scale = 1 / $throttledScale;
 
   $: windowWidth = 0;
   $: windowHeight = 0;
@@ -47,6 +50,7 @@
       mapWidth = bbox.width;
       mapHeight = bbox.height;
 
+      // this would be the center?
       let x = -bbox.x * scale;
       let y = -bbox.y * scale;
       // x = windowWidth / 2 - (bbox.width / 2) * baseScale;
