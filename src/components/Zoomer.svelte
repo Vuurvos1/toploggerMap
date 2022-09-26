@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import { zoomLevel } from '../stores';
 
-  $: zoom, ($zoomLevel = zoom);
+  // $: zoom, ($zoomLevel = zoom);
 
   export let disabled = false;
 
@@ -105,7 +105,7 @@
 
   /** @param {PointerEvent} ev  */
   function onPanningStop(ev) {
-    console.log(ev.pointerId, activePointerid);
+    // console.log(ev.pointerId, activePointerid);
     if (ev.pointerId !== activePointerid) return;
 
     activePointerid = undefined;
@@ -113,7 +113,7 @@
     x += panDeltaX;
     y += panDeltaY;
 
-    console.log(panDeltaX, panDeltaY);
+    // console.log(panDeltaX, panDeltaY);
 
     // const [clampedX, clampedY] = clampPanning(x, y);
     // x = clampedX;
@@ -143,9 +143,9 @@
     zoom = newZoom;
     x -= mouseX * scaleDifference;
     y -= mouseY * scaleDifference;
-    const [clampedX, clampedY] = clampPanning(x, y);
-    x = clampedX;
-    y = clampedY;
+    // const [clampedX, clampedY] = clampPanning(x, y);
+    // x = clampedX;
+    // y = clampedY;
   }
 
   let wrapperWidth;
@@ -169,20 +169,33 @@
   let lastPinchDisctance; // number
   /** @param {TouchEvent} ev  */
   function onTouchStart(ev) {
-    console.log('start');
+    const rect = inner.getBoundingClientRect();
+    // const mouseX = (pinchX - rect.left) / zoom;
+    // touch0X = (ev.touches[0].clientX - rect.left) / zoom;
+    // touch0Y = (ev.touches[0].clientY - rect.top) / zoom;
+    // console.log(ev.touches[0].clientX, ev.touches[0].clientY);
+
+    // console.log('start');
     if (ev.touches.length === 2) {
       // What even is a hypot??? and is it fast?
-      console.log('start');
-
+      // console.log('start');
       lastPinchDisctance = Math.hypot(
         ev.touches[0]?.pageX - ev.touches[1]?.pageX, // do a non-null assertion?
         ev.touches[0]?.pageY - ev.touches[1]?.pageY
       );
     }
-    console.log('start');
+    // console.log('start');
 
     onPanningStart(ev.touches[0]);
   }
+
+  // debugging points
+  let pinchCenterX;
+  let pinchCenterY;
+  let touch0X;
+  let touch0Y;
+  let touch1X;
+  let touch1Y;
 
   /** @param {TouchEvent} ev  */
   function onTouchMove(ev) {
@@ -190,28 +203,45 @@
     if (ev.touches.length !== 2) return;
 
     const rect = inner.getBoundingClientRect();
+
+    // let newZoom = Math.max(
+    //   scaleExtent[0],
+    //   Math.min(scaleExtent[1], zoom * Math.pow(2, -ev.deltaY / 500))
+    // );
+
+    // const rect = inner.getBoundingClientRect();
+    // const mouseX = (ev.clientX - rect.left) / zoom;
+    // const mouseY = (ev.clientY - rect.top) / zoom;
+
+    // const scaleDifference = newZoom - zoom;
+
+    // zoom = newZoom;
+    // x -= mouseX * scaleDifference;
+    // y -= mouseY * scaleDifference;
+
     const pinchDistance = Math.hypot(
       ev.touches[0].pageX - ev.touches[1].pageX, // do a non-null assertion?
       ev.touches[0].pageY - ev.touches[1].pageY
     ); // make this a function?
-    const pinchDelta = (pinchDistance / lastPinchDisctance - 1) * 2 + 1; // + ...
-    // const newZoom = clamp(zoom * pinchDistance) // min max zoom
+
+    const pinchDelta = (pinchDistance / lastPinchDisctance - 1) * 2 + 1; // Stuff to prevent zoom to get stuck at 0
     const newZoom = zoom * pinchDelta;
-    console.log(zoom, newZoom, pinchDistance);
     const scaleDifference = newZoom - zoom;
     zoom = newZoom;
 
-    const pinchX = ev.touches[0].clientX + ev.touches[1].clientX;
-    const pinchY = ev.touches[0].clientY + ev.touches[1].clientY;
-    const mouseX = clamp(pinchX - rect.left, 0, rect.width) / zoom;
-    const mouseY = clamp(pinchY - rect.top, 0, rect.height) / zoom;
+    const pinchX = (ev.touches[0].clientX + ev.touches[1].clientX) / 2;
+    const pinchY = (ev.touches[0].clientY + ev.touches[1].clientY) / 2;
+    // const mouseX = clamp(pinchX - rect.left, 0, rect.width) / zoom;
+    // const mouseY = clamp(pinchY - rect.top, 0, rect.height) / zoom;
+    const mouseX = (pinchX - rect.left) / zoom;
+    const mouseY = (pinchY - rect.top) / zoom;
 
     x -= mouseX * scaleDifference;
     y -= mouseY * scaleDifference;
 
-    const [clampedX, clampedY] = clampPanning(x, y);
-    x = clampedX;
-    y = clampedY;
+    // const [clampedX, clampedY] = clampPanning(x, y);
+    // x = clampedX;
+    // y = clampedY;
 
     lastPinchDisctance = pinchDistance;
 
@@ -238,6 +268,7 @@
 
 <!-- on:touchend={onTouchStop} -->
 <!-- preferably don't have the prevent defaults -->
+
 <div
   class="wrapper"
   on:pointerdown={onPanningStart}
