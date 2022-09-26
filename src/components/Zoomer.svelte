@@ -2,12 +2,14 @@
   import { onMount } from 'svelte';
   import { zoomLevel } from '../stores';
 
-  // $: zoom, ($zoomLevel = zoom);
+  $: zoom, ($zoomLevel = zoom);
 
   export let disabled = false;
 
+  // TODO pinching still feels a tiny bit jank so could be improved (centering is weird)
+
   let isPanning = false;
-  let zoom = 0.5; // TODO change back to 1
+  let zoom = 1;
 
   // $: zoomToPixel($selectedPixel);
   /** @param {{x: number, y: number}} pixel  */
@@ -31,6 +33,8 @@
 
   let innerHeight;
   let innerWidth;
+  let wrapperWidth;
+  let wrapperHeight;
 
   /** @type HTMLElement */
   let inner;
@@ -98,22 +102,18 @@
       clampedY = wrapperHeight / 2 - innerHeight * zoom;
     }
 
-    // console.log(clampedX, clampedY);
     // return [clampedX, clampedY];
     return [x, y]; // TODO fix math
   }
 
   /** @param {PointerEvent} ev  */
   function onPanningStop(ev) {
-    // console.log(ev.pointerId, activePointerid);
     if (ev.pointerId !== activePointerid) return;
 
     activePointerid = undefined;
     isPanning = false;
     x += panDeltaX;
     y += panDeltaY;
-
-    // console.log(panDeltaX, panDeltaY);
 
     // const [clampedX, clampedY] = clampPanning(x, y);
     // x = clampedX;
@@ -123,15 +123,17 @@
   }
 
   function clamp(num, min, max) {
+    // TODO is this faster than a ternary operator / an if else
     return Math.max(min, Math.min(num, max));
   }
 
   // TODO throttle this event?
   function onWheel(ev) {
     // TODO use clamp function here for readability
-    let newZoom = Math.max(
+    let newZoom = clamp(
+      zoom * Math.pow(2, -ev.deltaY / 500),
       scaleExtent[0],
-      Math.min(scaleExtent[1], zoom * Math.pow(2, -ev.deltaY / 500))
+      scaleExtent[1]
     );
 
     const rect = inner.getBoundingClientRect();
@@ -148,11 +150,6 @@
     // y = clampedY;
   }
 
-  let wrapperWidth;
-  let wrapperHeight;
-  // let innerWidth;
-  // let innerHeight;
-
   // TODO throttle event?
   function handleResize(width, height) {
     innerHeight = width;
@@ -167,35 +164,17 @@
 
   // Pinch zoom
   let lastPinchDisctance; // number
-  /** @param {TouchEvent} ev  */
+  /** @param {TouchEvent} ev */
   function onTouchStart(ev) {
-    const rect = inner.getBoundingClientRect();
-    // const mouseX = (pinchX - rect.left) / zoom;
-    // touch0X = (ev.touches[0].clientX - rect.left) / zoom;
-    // touch0Y = (ev.touches[0].clientY - rect.top) / zoom;
-    // console.log(ev.touches[0].clientX, ev.touches[0].clientY);
-
-    // console.log('start');
     if (ev.touches.length === 2) {
-      // What even is a hypot??? and is it fast?
-      // console.log('start');
+      // What even is a hypot? and is it fast?
       lastPinchDisctance = Math.hypot(
         ev.touches[0]?.pageX - ev.touches[1]?.pageX, // do a non-null assertion?
         ev.touches[0]?.pageY - ev.touches[1]?.pageY
       );
     }
-    // console.log('start');
-
     onPanningStart(ev.touches[0]);
   }
-
-  // debugging points
-  let pinchCenterX;
-  let pinchCenterY;
-  let touch0X;
-  let touch0Y;
-  let touch1X;
-  let touch1Y;
 
   /** @param {TouchEvent} ev  */
   function onTouchMove(ev) {
@@ -203,21 +182,6 @@
     if (ev.touches.length !== 2) return;
 
     const rect = inner.getBoundingClientRect();
-
-    // let newZoom = Math.max(
-    //   scaleExtent[0],
-    //   Math.min(scaleExtent[1], zoom * Math.pow(2, -ev.deltaY / 500))
-    // );
-
-    // const rect = inner.getBoundingClientRect();
-    // const mouseX = (ev.clientX - rect.left) / zoom;
-    // const mouseY = (ev.clientY - rect.top) / zoom;
-
-    // const scaleDifference = newZoom - zoom;
-
-    // zoom = newZoom;
-    // x -= mouseX * scaleDifference;
-    // y -= mouseY * scaleDifference;
 
     const pinchDistance = Math.hypot(
       ev.touches[0].pageX - ev.touches[1].pageX, // do a non-null assertion?
@@ -259,7 +223,6 @@
     return () => {
       // remove listeners
       // window.removeEventListener('touchstart', onTouchStart);
-      // window.removeEventListener('touchmove', onTouchMove);
     };
   });
 </script>
@@ -268,7 +231,6 @@
 
 <!-- on:touchend={onTouchStop} -->
 <!-- preferably don't have the prevent defaults -->
-
 <div
   class="wrapper"
   on:pointerdown={onPanningStart}
