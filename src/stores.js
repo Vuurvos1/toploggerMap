@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { writable, derived, get } from 'svelte/store';
 
 // gyms store
 const storedGyms = JSON.parse(localStorage.getItem('gyms'));
@@ -17,14 +17,41 @@ gym.subscribe((value) => {
   }
 });
 
-export const gradeSystem = writable(undefined);
+export const gradeSystem = writable('french_boulder');
 
 // TODO add stores for routes, svg and groups
-// export const map = svg
 
 // store map
-// store routes
+export const mapSvg = writable('');
 
-// store gyms
+// store routes
+export const routes = writable([]);
 
 // store checkmarked routes?
+
+export const zoomLevel = writable(1);
+
+export const selectedClimb = writable({});
+export const showRouteData = writable(false);
+
+export let colorMap = derived(gym, ($gym) => {
+  let map = {};
+  $gym.holds.forEach((item) => {
+    map[item.brand] = item.color_secondary
+      ? `linear-gradient(135deg, ${item.color} 50%, ${item.color_secondary} 50%)`
+      : item.color;
+  });
+  return map;
+});
+
+// Store wrapper
+export const throttle = (store) => {
+  let lastTime;
+  return derived(store, (value, set) => {
+    let now = Date.now();
+    if (!lastTime || now - lastTime > 10) {
+      set(value);
+      lastTime = now;
+    }
+  });
+};
