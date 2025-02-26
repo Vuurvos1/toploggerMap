@@ -2,6 +2,10 @@
 
 Playing around with the Toplogger API to create a map of boulders in a gym
 
+> [!WARNING]
+> 🚨 Deprecation Notice 🚨 \
+> This project has been archived and is no longer maintained. It was built using the Toplogger API, but since Toplogger fully migrated their API to be GraphQL based, this implementation no longer functions.
+
 ## Get started
 
 _Note that you will need to have [Node.js](https://nodejs.org) installed._
